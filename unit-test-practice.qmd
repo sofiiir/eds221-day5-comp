@@ -1,0 +1,49 @@
+---
+title: "Unit_test_practice"
+format: html
+---
+
+## Unit testing with the 'testthat' package
+
+First, install necessary packages
+```{r}
+#install.packages("testthat")
+#install.packages("devtools")
+#install.packages("remotes")
+
+library(testthat)
+library(devtools)
+library(remotes)
+```
+Write a function to practice unit tests.
+
+This function is going to find the mean value of each column, and then return the lowest and highest mean value calculated (in that order).
+
+We would expect: 
+- the output to be numeric
+- output should be a vector of length 2
+- first value should be smaller than the second value 
+```{r}
+mean_range <- function(df) {
+  # return the mean values of each column
+  col_means <- apply( X = df, MARGIN = 2, FUN = mean, na.rm = TRUE) 
+  # find minimum and maximum value 
+  col_mean_max <- max(col_means)
+  col_mean_min <- min(col_means)
+  
+  #return min and max values (in that order)
+  return(c(col_mean_min, col_mean_max))
+}
+
+mean_range(df = mtcars)
+```
+Write some unit tests!
+```{r}
+#| include: false
+#Test that the output is of length 2
+expect_length(mean_range(df = mtcars), 2)
+
+# Test that first vlue is less than second value
+expect_true(mean_range(mtcars)[1] < mean_range(mtcars)[2])
+```
+
