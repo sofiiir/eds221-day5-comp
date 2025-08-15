@@ -43,27 +43,32 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ WHAT HAPPENS HERE? ------ #
 # ------ comment line-by-line ---- #
 
-# The line below...
+# Create time series of years to estimate population size 
 time_yr <- seq(from = 0, to = 8, by = 1)
 
-# The line below...
+# Create an empty matrix to store pop sizes 
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below...
+# Populating first row with year 0 population sizes [row, column]
 proj_year[1, ] <- fish_year0
 
-# The for loop below...
-for (i in 2:length(time_yr)) {
+# Calculate projected population based on previous time and fills in matrix with pop estimates
+for (i in 2:length(time_yr)) { #starts at 2 b/c row 1 is already filled in
+ #can define i and run the inside of the for loop to test what its computing
+ # i <-2
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
 }
 
-
-# The rest is wrangling & visualization (run to check it out):
+# The rest is data wrangling and data visualization 
+# Changes column names to life stages
 colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")
 
+# Convert to a data frame 
 proj_df <- data.frame(time_yr, proj_year) %>% 
+  # Uses pivot longer to convert format from wide to long
   pivot_longer(cols = -time_yr, names_to = "lifestage", values_to = "stage_population")
 
+#Uses data from the df to plot each life stage population at each year
 ggplot(data = proj_df, aes(x = time_yr, y = stage_population)) +
   geom_line(aes(color = lifestage)) +
   scale_y_log10()
