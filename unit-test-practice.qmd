@@ -11,6 +11,7 @@ First, install necessary packages
 #install.packages("devtools")
 #install.packages("remotes")
 
+rm(list = ls())
 library(testthat)
 library(devtools)
 library(remotes)
@@ -40,10 +41,20 @@ mean_range(df = mtcars)
 Write some unit tests!
 ```{r}
 #| include: false
+# The above line stops code from being shown when rendered
 #Test that the output is of length 2
 expect_length(mean_range(df = mtcars), 2)
 
 # Test that first vlue is less than second value
 expect_true(mean_range(mtcars)[1] < mean_range(mtcars)[2])
+```
+
+##Practice sourcing functions
+```{r}
+# Source our food cart functions
+source(here::here("food_cart_functions.R"))
+
+# Test running function 
+name_cart(food = "strawberry", animal = "marmot")
 ```
 
